@@ -42,13 +42,28 @@ namespace grade_scores
         }
         public String GetFileContents()
         {
-            String readText = System.IO.File.ReadAllText(absoluteFilePath);
-            return readText;
+            try
+            {
+                String readText = System.IO.File.ReadAllText(absoluteFilePath);
+                return readText;
+            }
+            catch(FileNotFoundException ex)
+            {
+                throw new FileNotFoundException("Error accessing file:" + absoluteFilePath);
+            }
         }
         public bool WriteToFile(String fileContents)
         {
-            System.IO.File.WriteAllText(absoluteFilePath.Replace(".txt",suffix), fileContents);
-            return true;
+            String fileNameWithNewSuffix = absoluteFilePath.Replace(".txt", suffix);
+            try
+            {
+                System.IO.File.WriteAllText(fileNameWithNewSuffix, fileContents);
+                return true;
+            }
+            catch(FileNotFoundException ex)
+            {
+                throw new FileNotFoundException("Error writing to File: " + fileNameWithNewSuffix);
+            }
         }
     }
 }

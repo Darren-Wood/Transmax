@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 
 namespace grade_scores.tests
 {
@@ -35,7 +36,27 @@ Melanie,Bowring,89";
             String actual = target.GetFileContents();
             String expected = "";
             Assert.AreEqual(expected, actual);
- 
+        }
+        [TestMethod]
+        [DeploymentItem("student.txt", ".")]
+        public void WritingToFile()
+        {
+            String fileName = "student.txt";
+            String fileNameWithSuffix = "student-graded.txt";
+            File target = new File(fileName);
+            String expected = "Writing to file was a success";
+            bool success = target.WriteToFile(expected);
+            File target2 = new File(fileNameWithSuffix);
+            String actual = target2.GetFileContents();
+            Assert.AreEqual(expected, actual);
+        }
+        [ExpectedException(typeof(FileNotFoundException))]
+        [TestMethod]
+        public void FileDoesNotExist()
+        {
+            String fileNameThatDoesNotExist = "wrongFile.txt";
+            File target = new File(fileNameThatDoesNotExist);
+            target.GetFileContents();
         }
     }
 }
